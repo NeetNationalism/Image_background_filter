@@ -1,24 +1,16 @@
-#a program that removes white background
-#from images
-
+#a filter that turns the white background
+#into trans
 from PIL import Image
 import numpy as np
 im=Image.open("image.jpg")
-im_RGB=np.asarray(im)
-#shape==(height,width,3)
-#0,0 in top left
-im_png=Image.new("RGBA",im.size,(0,0,0,0))
-
-def is_white(rgb):
-#return true if rgb list/tuple is a white pixel
-    v=0
-    for value in rgb:
-        v+=255-value        
-    return v<20
-    
-for i in range(im.height):
-    for j in range(im.width):
-        if  not is_white(im_RGB[i,j]):
-         im_png.putpixel((j,i),(255,0,0,255))
-        #dummy pixel to be replaces with 
-        #actual pixel
+im_array=np.asarray(im)
+arr_shape=im_array.shape
+HEIGHT=arr_shape[0]
+WIDTH=arr_shape[1]
+print(im_array.dtype)
+arr_filtered=np.zeros((HEIGHT,WIDTH,4),np.uint8)
+for i in range(HEIGHT):
+    for j in range(WIDTH):
+        if np.array_equal(im_array[i,j],[255,255,255]):
+            arr_filtered[i,j]=[255,0,0,255]
+Image.fromarray(arr_filtered).show()
